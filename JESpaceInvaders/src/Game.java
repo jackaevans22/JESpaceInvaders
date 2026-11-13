@@ -10,7 +10,7 @@ public class Game  extends JPanel implements Runnable, KeyListener{
 	
 	private BufferedImage back; 
 	private int key; 
-
+    private char screen;
 
 
 	
@@ -18,7 +18,7 @@ public class Game  extends JPanel implements Runnable, KeyListener{
 		new Thread(this).start();	
 		this.addKeyListener(this);
 		key =-1; 
-		
+		screen = '1';
 	
 	}
 
@@ -38,7 +38,28 @@ public class Game  extends JPanel implements Runnable, KeyListener{
 	      {
 	      }
 	  	}
-	
+	public void screen(Graphics g2d) {
+				switch(screen){
+					case 'S' :
+						
+					break;
+					case '1' :
+
+                    break;
+                    case '2' :
+                    
+                    break;
+                    case '3' :
+                    
+                    break;
+					case 'W' :
+							
+					break;
+					case 'L' :
+						
+				
+				}
+			}
 
 	
 	
