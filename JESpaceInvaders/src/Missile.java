@@ -81,4 +81,7 @@ public int getX() {
         this.pic = pic;
     }
 
+    public void move() {
+    y += dy;
+}
 }
