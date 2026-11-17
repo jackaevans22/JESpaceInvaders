@@ -24,7 +24,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		addMouseMotionListener(this);
 		key =-1; 
 		screen = '1';
-		player = new PlayerShip(400, 500, 100, 100);
+		player = new PlayerShip(400, 650, 100, 100);
 		sMissiles = new ArrayList<PlayerMissile>();
 
 	}
@@ -53,6 +53,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 					case '1' :
 					g2d.drawImage(player.getPic().getImage(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), this);
 					
+					break;
                     case '2' :
                     
                     break;
@@ -89,6 +90,10 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		
 		screen(g2d);
 		drawSM(g2d);
+		for (int i = 0; i < sMissiles.size(); i++) {
+    	sMissiles.get(i).move();
+	}
+		removeOffscreenMissiles();
 		
 		
 	
@@ -162,7 +167,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	}
 
 public void playerMissile(int x) {
-    sMissiles.add(new PlayerMissile(x, player.getY(), 50, 50));
+    sMissiles.add(new PlayerMissile(player.getX()-15, player.getY(), 125, 50));
 }
 
 public void drawSM(Graphics g2d) {
@@ -176,12 +181,24 @@ public void drawSM(Graphics g2d) {
     }
 }
 
+
+
+
+public void removeOffscreenMissiles() {
+    for (int i = sMissiles.size() - 1; i >= 0; i--) {
+        if (sMissiles.get(i).getY() + sMissiles.get(i).getHeight() < 0) {
+            sMissiles.remove(i);
+        }
+    }
+}
+
+
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 		
-    if (screen == '1') {
+    if ((screen == '1'|| screen == '2'|| screen == '3'|| screen == '4')) {
         if (arg0.getButton() == MouseEvent.BUTTON1) {
 
             playerMissile(player.getX() + player.getWidth() / 2 - 25);
