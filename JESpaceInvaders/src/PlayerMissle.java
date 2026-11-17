@@ -7,6 +7,8 @@ public class PlayerMissile extends Missile {
         super();
     }
     public PlayerMissile(int x, int y, int width, int height) {
-        super(400, 700, 100, 100, new ImageIcon("redlaser.png"));
+        super(x, y, width, height, new ImageIcon("redlaser.png"));
+        setDy(-10);
     }
+    
 }
