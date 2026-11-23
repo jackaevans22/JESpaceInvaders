@@ -6,7 +6,7 @@ public class AlienMissile extends Missile {
     {
         super();
     }
-    public AlienMissile(int x, int y, int width, int height) {
-        super(400, 700, 100, 100, new ImageIcon("greenlaser.png"));
-    }
+    public AlienMissile(int xV, int yV, int w, int h, ImageIcon p) {
+    super(xV, yV, w, h, p);
+}
 }
