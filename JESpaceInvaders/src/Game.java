@@ -16,7 +16,9 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	private ArrayList<PlayerMissile> sMissiles;
 	private ArrayList<AlienShip> aliens;
 	private ArrayList<AlienMissile> aMissiles;
-
+	private boolean moveRight;
+	int fireCounter = 0;
+	
 
 	
 	public Game() {
@@ -28,9 +30,9 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		screen = '1';
 		player = new PlayerShip(400, 650, 100, 100);
 		sMissiles = new ArrayList<PlayerMissile>();
-		aliens = new ArrayList<AlienShip>();
+		aliens = setAlien1();
 		aMissiles = new ArrayList<AlienMissile>();
-		
+		moveRight = true;
 	}
 
 	
@@ -55,11 +57,15 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 						
 					break;
 					case '1' :
-					g2d.drawImage(player.getPic().getImage(), player.getX(), 
-					player.getY(), player.getWidth(), player.getHeight(), this);
+					g2d.drawImage(player.getPic().getImage(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), this);
 					
+					
+					 for(int i = 0; i < aliens.size(); i++) {
+						g2d.drawImage(aliens.get(i).getPic().getImage(),
+            				aliens.get(i).getX(),aliens.get(i).getY(),aliens.get(i).getWidth(),aliens.get(i).getHeight(), this);
+						}
 
-					
+
 					break;
                     case '2' :
                     
@@ -97,19 +103,34 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		
 		screen(g2d);
 		drawSM(g2d);
+		drawAM(g2d);
 		for (int i = 0; i < sMissiles.size(); i++) {
     	sMissiles.get(i).move();
 	}
 		removeOffscreenMissiles();
-		setAliens();
-		drawAliens(g2d);
+		moveAliens();
+		if(checkAliens()) {
+    		screen = 'L';
+		}
 	
+		/*Chatgpt generated code that would control how fast the aliens fire
+		prompt: "how do I change the aliens firing rate"*/
+		fireCounter++;
 		
-	
+		if(fireCounter >= 50) {
+    		getAlienMissile(g2d);
+    		fireCounter = 0;
+		}//lower value = fires more often 100~1/2 second
+		
+		
+		
+		
+		
+		
 		twoDgraph.drawImage(back, null, 0, 0);
-
 	}
 
+	
 
 
 
@@ -150,7 +171,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-   
+		// TODO Auto-generated method stub
+	
 	}
 
 
@@ -238,133 +260,124 @@ public void removeOffscreenMissiles() {
 		
 	}
 
-
-	/*AI helped me create different rows of alien ships Prompt:
-	using the images and code I provided help me create an arraylist 
-	for the alien ships, I want to have the first level be 3 rows of 
-	tie fighter images, and with the first row having 5 and back 2 
-	next rows having 7 */
-	public void setAliens() {
-
-    aliens.clear();
-
-    
-	 // Third row: 7 aliens
-    for (int i = 0; i < 5; i++) {
-
-        int x = 250 + (i * 100);
-        int y = 260;
-
-        aliens.add(new AlienShip(x, y,
-            new ImageIcon("tiefighter.png"), 60, 60));
-    }
-
-    // Second row: 7 aliens
-    for (int i = 0; i < 7; i++) {
-
-        int x = 150 + (i * 100);
-        int y = 180;
-
-        aliens.add(new AlienShip(x, y,
-            new ImageIcon("tiefighter.png"), 60, 60));
-    }
-
-   // First row: 5 aliens
-    for (int i = 0; i < 7; i++) {
-
-       
-
-		int x = 150 + (i * 100);
-        int y = 100;
-        aliens.add(new AlienShip(x, y,
-            new ImageIcon("tiefighter.png"), 60, 60));
-    }
-}
-	
-public void drawAliens(Graphics g2d) {
-
-    for (AlienShip a : aliens) {
-
-        g2d.drawImage(a.getPic().getImage(),
-            a.getX(), a.getY(),
-            a.getWidth(), a.getHeight(), this);
-
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-}
-
-//template code from a brickbreaker game
-/*
-
-public ArrayList<Bricks> setBricks() {
-      ArrayList<Bricks> temp = new ArrayList<Bricks>();
+	/*public ArrayList<AlienShip> setAlien() {
+      ArrayList<AlienShip> temp = new ArrayList<AlienShip>();
      int x = 0;
       int y = 100;
-     for(int i=0; i<7; i++) {
-          for(int j=0; j<10; j++) {
-              temp.add(new Bricks(x, y, Color.GRAY));
+     for(int i=0; i<2; i++) {
+          for(int j=0; j<7; j++) {
+              temp.add(new AlienShip(x, y, "tiefighter.png"));
               x += 100;
           }
          y += 50;
          x = 0;
      }
-	 //temp.add(new Brick(700, 500, Color.BLACK))
-
-	 // 2 bricks on the left
-	temp.add(new Bricks(0, 50, Color.GRAY));
-	temp.add(new Bricks(100, 50, Color.GRAY));
-
-	// bricks in the middle
-	temp.add(new Bricks(400, 50, Color.GRAY));
-	temp.add(new Bricks(500, 50, Color.GRAY));
-	
-
-	// 2 bricks on the right
-	temp.add(new Bricks(800, 50, Color.GRAY));
-	temp.add(new Bricks(900, 50, Color.GRAY));
-	//I used AI to get coordinates
-
-     return temp;
- }
+	}
+temp.add(new AlienShip(700, 500, "tiefighter.png"));
+temp.add(new AlienShip(700, 500, "tiefighter.png"));*/
 
 
- 
-for(int i=0; i<brickList.size(); i++) {
-			g2d.setColor(brickList.get(i).getC());
-			g2d.fillRect(
-				brickList.get(i).getX(),brickList.get(i).getY(),
-				brickList.get(i).getWidth(), brickList.get(i).getHeight());
+public ArrayList<AlienShip> setAlien1() {
 
-			//AI helped me draw a black outline
-			g2d.setColor(Color.BLACK);
-    		g2d.drawRect(
-       			brickList.get(i).getX(),brickList.get(i).getY(),
-				brickList.get(i).getWidth(),brickList.get(i).getHeight());
-    
-		} */
+    ArrayList<AlienShip> temp = new ArrayList<AlienShip>();
+
+    int x = 100;
+    int y = 100;
+
+	//back two rows of 7
+    for(int i=0; i<2; i++) {
+        for(int j=0; j<7; j++) {
+
+            temp.add(new AlienShip(x, y,
+                new ImageIcon("tiefighter.png"), 60, 60));
+
+            x += 100;
+        }
+
+        y += 75;
+        x = 100;
+    }
+
+	//front row of 5
+	x=175;
+    for(int j=0; j<5; j++) {
+        temp.add(new AlienShip(x, y,
+            new ImageIcon("tiefighter.png"), 60, 60));
+
+        x += 100;
+    }
+
+
+    return temp;
+}
+
+
+public void changeDyAlien(int dy)
+{
+    for(AlienShip a:aliens) {
+        a.setDy(dy);     
+    }  }
+
+public boolean checkAlienWall() {
+    for(AlienShip a:aliens) {
+    if(a.getX()+a.getWidth()>= getWidth() || a.getX()<0) {  
+        moveRight=!moveRight;
+		a.setY(a.getY() + a.getDy());
+        return true;   }}
+    return false;
+}
+
+public boolean checkAliens() {
+    for (AlienShip a:aliens) {
+        if (a.getY()>=player.getY()) {
+            return true; }}
+   return false;}
+
+public void moveAliens() {
+    if(checkAlienWall()) {
+            changeDyAlien(10);  }
+		for(AlienShip a:aliens) {
+            a.setY(a.getY() + a.getDy());
+            a.setDy(0);
+        }
+       for(AlienShip a:aliens) {
+            if(moveRight) {
+                a.setDx(1);}
+            else {
+                a.setDx(-1);}
+				a.setX(a.getX() + a.getDx());}
+				
+    }
+
+
+
+
+
+	public void getAlienMissile(Graphics g2d) {
+    if (aliens.isEmpty()) {
+        return;
+    }
+
+    int randAlien = (int)(Math.random()*aliens.size());
+
+    aMissiles.add(new AlienMissile(
+        aliens.get(randAlien).getX() + aliens.get(randAlien).getWidth()/2,
+        aliens.get(randAlien).getY() + aliens.get(randAlien).getHeight(),
+        10, 50, new ImageIcon("tielaser.png")
+    ));
+
+    //SoundManager.playPreloadedClip("fire");
+}
+public void drawAM(Graphics g2d) {
+    for(AlienMissile am:aMissiles) {
+        g2d.drawImage(am.getPic().getImage(),
+            am.getX(), am.getY(),
+            am.getWidth(), am.getHeight(), this);
+
+        am.setDy(2);
+        am.move();
+    }
+}
+
+
+}
